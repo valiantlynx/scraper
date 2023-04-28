@@ -1,5 +1,6 @@
 /node_modules
 /images
-/screenshots
+/manga
+/screenshot.png
 /.vscode
 /.package-lock.json

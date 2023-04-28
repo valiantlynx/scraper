@@ -10,6 +10,7 @@ async function run() {
     const url = `https://mangapark.net/browse?page=${pageNumber}`;
 
     try {
+        
         browser = await puppeteer.connect({
             browserWSEndpoint: 'wss://chrome.browserless.io?token=7fc44ee7-19d6-4da4-9bde-5b445b58414c',
         });
@@ -115,14 +116,15 @@ async function run() {
 
 
         // create the images folder if it does not exist
-        if (!fs.existsSync("./manga")) {
-            fs.mkdirSync("./mahnga");
+        if (!fs.existsSync("./mangas")) {
+            console.log("No mangas folder found. Creating mangas folder...");
+            fs.mkdirSync("./mangas");
         }
 
         // download each image and save it to the images folder
         await Promise.all(
             data.map(async (result) => {
-                let fileName = `./manga/${result.title}.jpg`;
+                let fileName = `./mangas/${result.title}.jpg`;
 
                 // check if the file already exists
                 if (fs.existsSync(fileName)) {
@@ -135,10 +137,10 @@ async function run() {
                     } else {
                         // add a number to the file name if it already exists but is not the same
                         let i = 1;
-                        while (fs.existsSync(`./manga/${result.title}-${i}.jpg`)) {
+                        while (fs.existsSync(`./mangas/${result.title}-${i}.jpg`)) {
                             i++;
                         }
-                        fileName = `./manga/${result.title}-${i}.jpg`;
+                        fileName = `./mangas/${result.title}-${i}.jpg`;
                     }
                 }
 
