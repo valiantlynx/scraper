@@ -36,6 +36,8 @@ async function run() {
                     const tagsElement = e.querySelector('.genres')
                     const chaptersElement = e.querySelector('.text-ellipsis-1')
                     const srcElement = e.querySelector('a')
+                    const descriptionElement = e.querySelector('.limit-html')
+                    const authorElement = e.querySelector('.autarts')
 
                     return {
                         title: titleElement ? titleElement.innerText : null,
@@ -43,12 +45,16 @@ async function run() {
                         tags: tagsElement ? tagsElement.innerText : null,
                         latestChapter: chaptersElement ? chaptersElement.innerText : null,
                         src: srcElement ? srcElement.href : null,
+                        description: descriptionElement ? descriptionElement.innerText : null,
+                        author: authorElement ? [authorElement.innerText, authorElement.querySelector('a').href] : null, // [name, link] might use the link later to get more info
                     };
                 }, url);
 
                 return content;
             })
         );
+
+        console.log("data new", JSON.stringify(data, null, 2));
 
         let mangaData: any = {}
 
