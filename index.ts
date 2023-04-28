@@ -9,7 +9,7 @@ async function run() {
     const pageNumber = 2549;
 
     // test url 
-    // const url = `https://bot.sannysoft.com/`;
+    //const url = `https://bot.sannysoft.com/`;
 
     const url = `https://mangapark.net/browse?page=${pageNumber}`;
 
@@ -21,6 +21,9 @@ async function run() {
         //     browserWSEndpoint: endpoint,
         // });
 
+        // 'false' makes the browser visible and it does not look like a robot, 
+        // 'true' makes the browser invisible and it looks like a robot
+        // 'new' makes the browser invisible and it does not look like a robot,
         browser = await puppeteer.launch({ headless: false });
 
         const page = await browser.newPage();
@@ -28,10 +31,11 @@ async function run() {
 
         // go to the url and get the manga list
         await page.goto(url);
+        await page.screenshot({ path: "screenshot.png" });
 
         await page.waitForSelector("#subject-list");
 
-        await page.screenshot({ path: "screenshot.png" });
+
 
         const mangas = Array.from(await page.$$(".pb-3"));
         const data = await Promise.all(
@@ -65,7 +69,7 @@ async function run() {
         let mangaData: any = {}
 
         const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
-       
+
 
         // go to each manga page and get the image
         for (const manga of data) {
@@ -126,7 +130,7 @@ async function run() {
 
                 // download the images
                 console.log("Downloading chapter images...");
-                downloadChapter(chapter, manga, data) 
+                downloadChapter(chapter, manga, data)
 
                 mangaData = {
                     ...manga,
@@ -183,19 +187,19 @@ async function run() {
         }
 
         async function downloadChapter(chapter: any, manga: any, data: any) {
-        
+
             // create the mangas folder if it does not exist and create the manga folder if it does not exist and create the chapter folder if it does not exist
             if (!fs.existsSync("./mangas")) {
                 console.log("No mangas folder found. Creating mangas folder...");
                 fs.mkdirSync("./mangas");
                 console.log(`Created mangas folder. Creating manga folder...`);
-                
+
             }
             if (!fs.existsSync(`./mangas/${manga.title}`)) {
                 console.log(`No manga folder found for ${manga.title}. Creating manga folder...`);
                 fs.mkdirSync(`./mangas/${manga.title}`);
                 console.log(`Created manga folder for ${manga.title}. Creating chapter folder...`);
-                
+
             }
             if (!fs.existsSync(`./mangas/${manga.title}/${chapter.chapterTitle}`)) {
                 console.log(`No chapter folder found for ${chapter.chapterTitle}. Creating chapter folder...`);
