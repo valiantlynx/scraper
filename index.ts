@@ -1,11 +1,15 @@
 
-import puppeteer from "puppeteer-core";
+import puppeteer from "puppeteer"; // 'puppeteer' if not using browserless and 'puppeteer-core' if using browserless
+
 const fetch = require("node-fetch");
 const fs = require("fs");
 
 async function run() {
     let browser;
-    const pageNumber = 1;
+    const pageNumber = 2549;
+
+    // test url 
+    // const url = `https://bot.sannysoft.com/`;
 
     const url = `https://mangapark.net/browse?page=${pageNumber}`;
 
@@ -13,9 +17,11 @@ async function run() {
 
     try {
 
-        browser = await puppeteer.connect({
-            browserWSEndpoint: endpoint,
-        });
+        // browser = await puppeteer.connect({
+        //     browserWSEndpoint: endpoint,
+        // });
+
+        browser = await puppeteer.launch({ headless: false });
 
         const page = await browser.newPage();
         await page.setDefaultNavigationTimeout(2 * 60 * 1000);
@@ -59,6 +65,7 @@ async function run() {
         let mangaData: any = {}
 
         const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+       
 
         // go to each manga page and get the image
         for (const manga of data) {
